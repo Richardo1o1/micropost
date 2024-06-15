@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// mysql
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// postgresql
+// datasource db {
+//   provider = "postgresql"
+//   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+//   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+// }
+
+
+// prefix 10 Mysql version
+model User{
+  id String @id 
+  name String?
+  username String? @unique
+  bio String?
+  email String? @unique
+  emailVerified DateTime?
+  image String? @db.LongText
+  coverImage String? @db.LongText
+  profileImage String? @db.LongText
+  hashedPassword String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hasNotification Boolean?
+
+  followingIds FollowingId[]
+  posts Post[]
+  comments Comment[]
+  notifications Notification[]
+}
+
+// prefix 10 postgresql version
+// model User{
+//   id String @id 
+//   name String?
+//   username String? @unique
+//   bio String?
+//   email String? @unique
+//   emailVerified DateTime?
+//   image String
+//   coverImage String
+//   profileImage String
+//   hashedPassword String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   hasNotification Boolean?
+
+//   followingIds FollowingId[]
+//   posts Post[]
+//   comments Comment[]
+//   notifications Notification[]
+// }
+
+// prefix 15
+model FollowingId {
+  id String @id 
+  userId String
+  followingId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// prefix 20
+model Post {
+  id String @id 
+  body String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId String
+  likedIds LikedIds[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  comments Comment[]
+}
+
+// prefix 28
+model LikedIds {
+  id String @id 
+  postId String
+  likedId String
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+// prefix 25
+model Comment {
+  id String @id 
+  body String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId String
+  postId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+// prefix 30
+model Notification {
+  id String @id 
+  body String
+  userId String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
