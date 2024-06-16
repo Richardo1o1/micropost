@@ -15,10 +15,10 @@ generator client {
 }
 
 // mysql
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL")
+// }
 
 // postgresql
 // datasource db {
@@ -29,28 +29,6 @@ datasource db {
 
 
 // prefix 10 Mysql version
-model User{
-  id String @id 
-  name String?
-  username String? @unique
-  bio String?
-  email String? @unique
-  emailVerified DateTime?
-  image String? @db.LongText
-  coverImage String? @db.LongText
-  profileImage String? @db.LongText
-  hashedPassword String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  hasNotification Boolean?
-
-  followingIds FollowingId[]
-  posts Post[]
-  comments Comment[]
-  notifications Notification[]
-}
-
-// prefix 10 postgresql version
 // model User{
 //   id String @id 
 //   name String?
@@ -58,9 +36,9 @@ model User{
 //   bio String?
 //   email String? @unique
 //   emailVerified DateTime?
-//   image String
-//   coverImage String
-//   profileImage String
+//   image String? @db.LongText
+//   coverImage String? @db.LongText
+//   profileImage String? @db.LongText
 //   hashedPassword String?
 //   createdAt DateTime @default(now())
 //   updatedAt DateTime @updatedAt
@@ -71,6 +49,28 @@ model User{
 //   comments Comment[]
 //   notifications Notification[]
 // }
+
+// prefix 10 postgresql version
+model User{
+  id String @id 
+  name String?
+  username String? @unique
+  bio String?
+  email String? @unique
+  emailVerified DateTime?
+  image String
+  coverImage String
+  profileImage String
+  hashedPassword String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hasNotification Boolean?
+
+  followingIds FollowingId[]
+  posts Post[]
+  comments Comment[]
+  notifications Notification[]
+}
 
 // prefix 15
 model FollowingId {
