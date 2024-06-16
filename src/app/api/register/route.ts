@@ -13,6 +13,9 @@ export async function POST(request : Request) {
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const userId = getUniqueID('10');
+    
+    console.log("requestBody",email, username, name, hashedPassword, userId);
+    
     const user = await prisma.user.create({
         data: {
             id: userId,

@@ -7,7 +7,7 @@ import Avatar from "../Page/Avatar";
 const FollowBar =() =>{
    const { data: users = [] } = useUsers();
 
-   console.log("user", users );
+   //console.log("follow user", users );
 
    if(users.length === 0) {
     return null;
