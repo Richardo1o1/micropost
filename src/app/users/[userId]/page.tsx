@@ -6,6 +6,7 @@ import useUser from "@/hooks/useUser";
 import UserHero from "@/components/Users/UserHero";
 import Header from '@/components/Page/Header';
 import UserBio from "@/components/Users/UserBio";
+import PostFeed from "@/components/Page/PostFeed";
 
 const UserView = ({ params }: { params: { userId: string } }) => {
     const { data: fetechedUser, isLoading } = useUser(params.userId);
@@ -16,6 +17,7 @@ const UserView = ({ params }: { params: { userId: string } }) => {
           flex
           justify-center
           items-center
+          m-5
           h-full
         ">
           <ClipLoader color="lightblue" size={90} />
@@ -28,6 +30,7 @@ const UserView = ({ params }: { params: { userId: string } }) => {
         <Header showBackArrow  label={fetechedUser?.name} />
         <UserHero userId={ params.userId as string } />
         <UserBio userId={ params.userId as string } />
+        <PostFeed userId={ params.userId as string } />
       </>
     );
 }

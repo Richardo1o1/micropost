@@ -9,6 +9,7 @@ import useEditModal from "@/hooks/useEditModal";
 import useUser from "@/hooks/useUser";
 import MPinput from "../Page/MPinput";
 import MPmodal from "../Page/MPmodal";
+import ImageUpload from "../Page/ImageUpload";
 
 
 const EditModal = () =>{
@@ -60,6 +61,18 @@ const EditModal = () =>{
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
+      <ImageUpload
+        value={profileImage}
+        disabled={isLoading}
+        onChange={(image)=>setProfileImage(image)}
+        label="Upload profile image" 
+      />
+      <ImageUpload
+        value={coverImage}
+        disabled={isLoading}
+        onChange={(image)=>setCoverImage(image)}
+        label="Upload cover image" 
+      />
       <MPinput 
         placeholder="Name"
         onChange={(e)=> setName(e.target.value)}
