@@ -7,11 +7,13 @@ import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
 import MPinput from "@/components/Page/MPinput";
 import MPmodal from "@/components/Page/MPmodal";
+import useUsers from "@/hooks/useUsers";
 
 
 const RegisterModal =() =>{
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
+  const { mutate: mutateUsers } = useUsers();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,7 +41,8 @@ const RegisterModal =() =>{
           username,
           name
         })
-
+      
+      mutateUsers();
       registerModal.onClose();
     } catch(error) {
       console.log(error);
