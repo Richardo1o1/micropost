@@ -9,16 +9,16 @@ export async function POST(request : Request) {
   try{
     const requestBody = await request.json();
 
-    const { email,username, name, password } = requestBody;
+    const { email ,username, name, password } = requestBody;
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const userId = getUniqueID('10');
     const user = await prisma.user.create({
         data: {
             id: userId,
-            email,
-            username,
-            name,
+            email : email as string,
+            username: username as string,
+            name : name as string,
             hashedPassword
         }
     });
