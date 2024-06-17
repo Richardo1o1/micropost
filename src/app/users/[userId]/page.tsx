@@ -6,7 +6,7 @@ import useUser from "@/hooks/useUser";
 import UserHero from "@/components/Users/UserHero";
 import Header from '@/components/Page/Header';
 import UserBio from "@/components/Users/UserBio";
-import PostFeed from "@/components/Page/PostFeed";
+import PostFeed from "@/components/posts/PostFeed";
 
 const UserView = ({ params }: { params: { userId: string } }) => {
     const { data: fetechedUser, isLoading } = useUser(params.userId);

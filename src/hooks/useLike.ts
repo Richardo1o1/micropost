@@ -6,22 +6,19 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import usePosts from "./usePosts";
 import useLikeUserList from "./useLikeUserList";
+import usePost from "./usePost";
 
 const useLike = ( postId : string ) => {
   const { data: currentUser  } = useCurrentUser();
   
-  const { mutate: mutateFetchedPost } = usePosts( postId );
+  const { mutate: mutateFetchedPost } = usePost( postId );
   const { data: likelist,mutate: mutateFetchedLikelist } = useLikeUserList( postId );
-  
-  //TODO
-  //const { data: posts,mutate: mutateFetchedPosts } = usePosts( currentUser?.id );
 
   const loginModel = useLoginModal();
 
   const hasLikes = useMemo(() => {
-  const list = likelist?.map( (item: { likedId: any; }) => item.likedId) || [];
+    const list = likelist?.map( (item: { likedId: any; }) => item.likedId) || [];
 
-    //console.log('haslikes', list.includes(currentUser?.id), postId , currentUser?.id );
     return list.includes(currentUser?.id);
   },[ likelist,currentUser ]);
 

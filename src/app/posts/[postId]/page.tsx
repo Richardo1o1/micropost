@@ -2,15 +2,16 @@
 
 import { ClipLoader } from "react-spinners";
 
-import usePosts from "@/hooks/useFollowingList";
 import Header from "@/components/Page/Header";
-import PostItem from "@/components/Page/PostItem";
+import PostItem from "@/components/posts/PostItem";
 import MPform from "@/components/Page/MPform";
+import CommentFeed from "@/components/posts/CommentFeed";
+import usePost from "@/hooks/usePost";
 
 const PostView = ({ params }: { params: { postId: string } }) => {
   const  postId  = params.postId
 
-  const { data: fetchedPost, isLoading } = usePosts(postId as string);
+  const { data: fetchedPost, isLoading } = usePost(postId as string);
 
   if (isLoading || !fetchedPost) {
     return (
@@ -28,12 +29,13 @@ const PostView = ({ params }: { params: { postId: string } }) => {
   return (
     <>
       <Header label={"Microblog-Post"} showBackArrow />
-      <PostItem data={fetchedPost} userId={fetchedPost.user.id} />
+      <PostItem data={fetchedPost} />
       <MPform
         postId={postId as string} 
         isComment
         placeholder="Post your reply"
       />
+      <CommentFeed comments={fetchedPost.comments} />
     </>
   )
 }

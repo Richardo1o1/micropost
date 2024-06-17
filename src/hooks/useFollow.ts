@@ -9,16 +9,16 @@ import useFollowlist from "./useFollowingList";
 const useFollow = ( userId:string ) => {
   const { data: currentUser, mutate: mutateCurrentUser } = useCurrentUser();
   const { mutate: mutateFetchedUser } = useUser( userId );
-  const { data: followlist,mutate: mutateFetchedFollowerlist } = useFollowlist( currentUser?.id );
-    
+  const { data: followlist,mutate: mutateFetchedFollowerlist } = useFollowlist( userId );
+  
   const loginModel = useLoginModal();
 
   const isFollowing = useMemo(() => {
     const list = followlist?.map( (item: { followingId: any; }) => item.followingId) || [];
 
-    //console.log('followlistLength',list, followlist,userId);
-    return list.includes(userId);
-  },[ followlist,userId ]);
+    //console.log('followlistLength',list, followlist,userId,currentUser.id);
+    return list.includes(currentUser.id);
+  },[ followlist,currentUser ]);
 
   const toggleFollow = useCallback(async () => {
     if(!currentUser){

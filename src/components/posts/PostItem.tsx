@@ -7,24 +7,24 @@ import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useLoginModal from "@/hooks/useLoginModal";
-import Avatar from "./Avatar";
+import Avatar from "../Page/Avatar";
 import useLike from "@/hooks/useLike";
+import useLikeUserList from "@/hooks/useLikeUserList";
 
 
 interface PostFeedProps{
    data: Record<string, any>
-   userId?: string;
 }
 
-const PostItem: React.FC<PostFeedProps> =({ data, userId }) =>{
+const PostItem: React.FC<PostFeedProps> =({ data }) =>{
    const router = useRouter();
    const loginModel = useLoginModal();
 
    const { data: currentUser } = useCurrentUser();
+   const { data: likelist } = useLikeUserList( data.id );
 
    const { hasLikes, toggleLike } = useLike( data.id );
 
-   
    const gotoUser = useCallback((event:any) => {
       event.stopPropagation();
 
@@ -100,7 +100,7 @@ const PostItem: React.FC<PostFeedProps> =({ data, userId }) =>{
                         hover:text-sky-500
                      "
                   >
-                     <LikeIcon size={20} color={hasLikes? "red" : ""} />
+                     <AiOutlineMessage size={20} />
                      <p>
                         {data.comments?.length || 0}
                      </p>
@@ -118,9 +118,9 @@ const PostItem: React.FC<PostFeedProps> =({ data, userId }) =>{
                         hover:text-red-500
                      "
                   >
-                     <AiOutlineHeart size={20} />
+                     <LikeIcon size={20} color={hasLikes? "red" : ""} />
                      <p>
-                        {data.comments?.length || 0}
+                        {likelist?.length || 0}
                      </p>
                   </div>
                </div>

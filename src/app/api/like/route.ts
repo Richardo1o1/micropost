@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import prisma from '@/libs/prismadb';
 import getUniqueID from '@/libs/uniqueID';
@@ -68,16 +68,17 @@ export async function DELETE(request : Request) {
 
 // Process GET request to /api/like
 // Giving postId , Return the user list who liked this postId
-export async function GET(request : Request, { params }: { params: { postId: string } }) {
+export async function GET(request : NextRequest) {
   try{
-    if ( params.postId === null ) {
+    const postId = request.nextUrl.searchParams.get('postId');
+
+    if ( postId === null ) {
       return NextResponse.json({ error: 'postId  is required' }, { status: 400 });
     }
 
-
     const users = await prisma.likedIds.findMany({
         where: {
-          postId: params.postId
+          postId: postId
         }
       });
     

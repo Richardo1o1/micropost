@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import prisma from '@/libs/prismadb';
 import getUniqueID from '@/libs/uniqueID';
@@ -54,8 +54,8 @@ export async function DELETE(request : Request) {
 
     await prisma.followingId.deleteMany({
       where: {
-        userId: currentUserId,
-        followingId: userId
+        userId: userId,
+        followingId: currentUserId
       }
     });
 
@@ -69,27 +69,34 @@ export async function DELETE(request : Request) {
 // Process GET request to /api/follow
 // Giving userId, Return the user list who userId is following
 // Giving postAuthorId , Return the user list who is following postAuthorId
-export async function GET(request : Request, { params }: { params: { userId?: string, postAuthorId?: string} }) {
+export async function GET(request : NextRequest) {
   try{
-    if ( params.userId === null && params.postAuthorId === null ) {
+
+    const userId = request.nextUrl.searchParams.get('userId');
+    const postAuthorId = request.nextUrl.searchParams.get('postAuthorId');
+
+    if ( userId === null && postAuthorId === null ) {
       return NextResponse.json({ error: 'userId or postAuthorId is required' }, { status: 400 });
     }
 
+    //console.log("follow api: userId", userId, "postAuthorId", postAuthorId);
+
     let users;
-    if (params.userId) {
+    if ( userId) {
       users = await prisma.followingId.findMany({
         where: {
-          userId: params.userId
+          userId: userId
         }
       });
-    } else if (params.postAuthorId) {
+    } else if (postAuthorId) {
       users = await prisma.followingId.findMany({
         where: {
-          followingId: params.postAuthorId
+          followingId: postAuthorId
         }
       });
     }
 
+    //console.log("follow api: users", users);
     return NextResponse.json(users, { status: 200 });
   } catch (error){
     console.log(error);

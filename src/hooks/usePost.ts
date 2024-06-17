@@ -2,8 +2,8 @@ import useSWR from 'swr';
 
 import fetcher from '../libs/fetcher';
 
-const useFollowingList = (userId?:string) => {
-    const url = `/api/follow/?userId=${userId}`
+const usePost = ( postId:string ) => {
+    const url = `/api/posts/${postId}` 
     const { 
       data, 
       error, 
@@ -18,4 +18,4 @@ const useFollowingList = (userId?:string) => {
     }
 };
 
-export default useFollowingList;
+export default usePost;

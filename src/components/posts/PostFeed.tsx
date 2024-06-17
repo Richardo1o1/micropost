@@ -9,12 +9,13 @@ interface PostFeedProps {
 
 const PostFeed: React.FC<PostFeedProps> = ({ userId }) =>{
   const { data: posts = []} = usePosts( userId ) ;
+  
+  console.log("PostFeed data:", posts,userId);
 
   return (
     <>
       {posts.map((post: Record<string, any >) => (
         <PostItem 
-          userId = { userId }
           key = {post.id} 
           data = {post} 
         />
