@@ -3,11 +3,12 @@
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from "react";
-import { AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useLoginModal from "@/hooks/useLoginModal";
 import Avatar from "./Avatar";
+import useLike from "@/hooks/useLike";
 
 
 interface PostFeedProps{
@@ -21,6 +22,9 @@ const PostItem: React.FC<PostFeedProps> =({ data, userId }) =>{
 
    const { data: currentUser } = useCurrentUser();
 
+   const { hasLikes, toggleLike } = useLike( data.id );
+
+   
    const gotoUser = useCallback((event:any) => {
       event.stopPropagation();
 
@@ -34,8 +38,15 @@ const PostItem: React.FC<PostFeedProps> =({ data, userId }) =>{
 
    const onLike = useCallback((event: any) => {
       event.stopPropagation();
-      loginModel.onOpen();
-   },[loginModel])
+
+      if (!currentUser) {
+         return loginModel.onOpen();
+      }
+      
+      toggleLike();
+   },[loginModel, currentUser, toggleLike])
+
+   const LikeIcon = hasLikes ? AiFillHeart : AiOutlineHeart;
 
    const createdAt = useMemo(() => {
       if (!data?.createdAt){
@@ -89,7 +100,7 @@ const PostItem: React.FC<PostFeedProps> =({ data, userId }) =>{
                         hover:text-sky-500
                      "
                   >
-                     <AiOutlineMessage size={20} />
+                     <LikeIcon size={20} color={hasLikes? "red" : ""} />
                      <p>
                         {data.comments?.length || 0}
                      </p>

@@ -1,0 +1,89 @@
+import { NextResponse } from "next/server";
+
+import prisma from '@/libs/prismadb';
+import getUniqueID from '@/libs/uniqueID';
+import getCurrentUser from '@/libs/getCurrentuser';
+
+// Process POST request to /api/like
+export async function POST(request : Request) {
+  try{
+    const requestBody = await request.json();
+
+    const { postId } = requestBody;
+    const currentUserId = await getCurrentUser();
+    const followId = getUniqueID('28');
+    
+    if(!postId) {
+      throw new Error('Invalid postId');
+    }
+
+    if(!currentUserId) {
+      throw new Error('Invalid currentUserId');
+    }
+
+    const like = await prisma.likedIds.create({
+      data: {
+        id : followId,
+        postId : postId as string,
+        likedId : currentUserId as string
+      }
+    });
+
+    return NextResponse.json(like, { status: 200 });
+  } catch (error){
+    console.log(error);
+    return NextResponse.json(error, { status: 400 });
+  }
+}
+
+// Process DELETE request to /api/like
+export async function DELETE(request : Request) {
+  try{
+    const requestBody = await request.json();
+
+    const { postId } = requestBody;
+    const currentUserId = await getCurrentUser();
+    
+    if(!postId) {
+      throw new Error('Invalid ID');
+    }
+
+    if(!currentUserId) {
+      throw new Error('Invalid currentUserId');
+    }
+
+    await prisma.likedIds.deleteMany({
+      where: {
+        postId: postId as string,
+        likedId: currentUserId,
+      }
+    });
+
+    return NextResponse.json( { status: 200 });
+  } catch (error){
+    console.log(error);
+    return NextResponse.json(error, { status: 400 });
+  }
+}
+
+// Process GET request to /api/like
+// Giving postId , Return the user list who liked this postId
+export async function GET(request : Request, { params }: { params: { postId: string } }) {
+  try{
+    if ( params.postId === null ) {
+      return NextResponse.json({ error: 'postId  is required' }, { status: 400 });
+    }
+
+
+    const users = await prisma.likedIds.findMany({
+        where: {
+          postId: params.postId
+        }
+      });
+    
+    return NextResponse.json(users, { status: 200 });
+  } catch (error){
+    console.log(error);
+    return NextResponse.json(error, { status: 400 });
+  }
+}
