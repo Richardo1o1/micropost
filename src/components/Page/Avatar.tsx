@@ -37,6 +37,7 @@ const Avatar: React.FC<AvatarProps> =({
       hover:opacity-90 
       transition 
       cursor-pointer 
+      flex-shrink-0
       relative`} 
       > 
       <Image 

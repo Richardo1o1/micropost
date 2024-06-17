@@ -15,42 +15,20 @@ generator client {
 }
 
 // mysql
-// datasource db {
-//   provider = "mysql"
-//   url      = env("DATABASE_URL")
-// }
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
 
 // postgresql
-datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-}
+// datasource db {
+//   provider = "postgresql"
+//   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+//   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+// }
 
 
 // prefix 10 Mysql version
-// model User{
-//   id String @id 
-//   name String?
-//   username String? @unique
-//   bio String?
-//   email String? @unique
-//   emailVerified DateTime?
-//   image String? @db.LongText
-//   coverImage String? @db.LongText
-//   profileImage String? @db.LongText
-//   hashedPassword String?
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   hasNotification Boolean?
-
-//   followingIds FollowingId[]
-//   posts Post[]
-//   comments Comment[]
-//   notifications Notification[]
-// }
-
-// prefix 10 postgresql version
 model User{
   id String @id 
   name String?
@@ -58,12 +36,12 @@ model User{
   bio String?
   email String? @unique
   emailVerified DateTime?
-  image String?
-  coverImage String?
-  profileImage String?
+  image String? @db.LongText
+  coverImage String? @db.LongText
+  profileImage String? @db.LongText
   hashedPassword String?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   hasNotification Boolean?
 
   followingIds FollowingId[]
@@ -71,6 +49,28 @@ model User{
   comments Comment[]
   notifications Notification[]
 }
+
+// prefix 10 postgresql version
+// model User{
+//   id String @id 
+//   name String?
+//   username String? @unique
+//   bio String?
+//   email String? @unique
+//   emailVerified DateTime?
+//   image String?
+//   coverImage String?
+//   profileImage String?
+//   hashedPassword String?
+//   createdAt DateTime? @default(now())
+//   updatedAt DateTime? @updatedAt
+//   hasNotification Boolean?
+
+//   followingIds FollowingId[]
+//   posts Post[]
+//   comments Comment[]
+//   notifications Notification[]
+// }
 
 // prefix 15
 model FollowingId {

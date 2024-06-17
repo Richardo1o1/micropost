@@ -46,7 +46,7 @@ const MPform:React.FC<FromProps> = ({
     } finally {
       setIsLoading(false);
     }
-  },[body, currentUser , mutatePosts]);
+  },[body , mutatePosts]); 
 
   return(
     <div className="border-b-[1px] border-neutral-800 px-5 py-2"> 

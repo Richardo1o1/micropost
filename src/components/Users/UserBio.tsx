@@ -8,6 +8,8 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 import useUser from '@/hooks/useUser';
 import MPbutton from '../Page/MPbutton';
 import useEditModal from '@/hooks/useEditModal';
+import useFollow from '@/hooks/useFollow';
+
 
 
 interface UserBioProps {
@@ -28,6 +30,8 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
 
   const editModal = useEditModal();
 
+  const { isFollowing, toggleFollow } = useFollow( userId );
+
   return (
     <div className='border-b-[1px] border-neutral-800 pb-4'>
       <div className='flex justify-end p-2'>
@@ -35,9 +39,10 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
           <MPbutton secondary label='Edit' onClick={ editModal.onOpen } />
         ) : (
           <MPbutton 
-            onClick={()=>{}}
-            label='Follow'
-            secondary
+            onClick={toggleFollow}
+            label={ isFollowing ? 'Unfollow' : 'Follow' }
+            secondary={!isFollowing}
+            outline={isFollowing}
           />
       )}
       </div>
