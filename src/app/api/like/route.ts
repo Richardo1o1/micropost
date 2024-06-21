@@ -13,6 +13,10 @@ export async function POST(request : Request) {
     const currentUserId = await getCurrentUser();
     const followId = getUniqueID('28');
     
+    if (!requestBody || !currentUserId ) {
+      throw new Error('Missing fields requestBody/currentuserId!');
+    }
+
     if(!postId) {
       throw new Error('Invalid postId');
     }
@@ -28,6 +32,36 @@ export async function POST(request : Request) {
         likedId : currentUserId as string
       }
     });
+
+    // Add notification message
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId
+      },
+      include: {
+        user: true
+      }
+    });
+
+    if(post?.userId) {
+      const notificationId = getUniqueID('30');
+      await prisma.notification.create({
+        data: {
+          id: notificationId,
+          body: 'Someone liked your post!',
+          userId: post.userId 
+        }  
+      });
+
+      await prisma.user.update({
+        where: {
+          id: post.userId
+        },
+        data: {
+          hasNotification: true
+        }
+      })  
+    }
 
     return NextResponse.json(like, { status: 200 });
   } catch (error){
@@ -59,6 +93,7 @@ export async function DELETE(request : Request) {
       }
     });
 
+    
     return NextResponse.json( { status: 200 });
   } catch (error){
     console.log(error);

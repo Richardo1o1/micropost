@@ -2,14 +2,14 @@ import useSWR from 'swr';
 
 import fetcher from '../libs/fetcher';
 
-const usePost = ( postId?:string ) => {
-  const url = postId ? `/api/posts/${postId}` : null
+const useNotifications = ( userId?:string ) => {
     const { 
       data, 
       error, 
       isLoading, 
       mutate 
-    } = useSWR(url, fetcher)
+    } = useSWR('/api/notifications', fetcher);
+    
     return {
       data,
       error,
@@ -18,4 +18,4 @@ const usePost = ( postId?:string ) => {
     }
 };
 
-export default usePost;
+export default useNotifications;

@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next"
 
 import prisma from "@/libs/prismadb"
 
-// Process POST request to /api/current
+// Process GET request to /api/current
 export async function GET(request : Request) {
   try{
     const session = await getServerSession(options);

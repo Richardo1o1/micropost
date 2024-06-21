@@ -17,7 +17,12 @@ const useFollow = ( userId:string ) => {
     const list = followlist?.map( (item: { followingId: any; }) => item.followingId) || [];
 
     //console.log('followlistLength',list, followlist,userId,currentUser.id);
-    return list.includes(currentUser.id);
+    if (!currentUser){
+      return false;
+    } 
+    else {
+      return list.includes(currentUser.id);
+    } 
   },[ followlist,currentUser ]);
 
   const toggleFollow = useCallback(async () => {

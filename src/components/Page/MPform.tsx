@@ -8,8 +8,9 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useRegisterModal from "@/hooks/useRegisterModal";
 import Avatar from "./Avatar";
 import MPbutton from "./MPbutton";
-import usePosts from "@/hooks/usePosts";
 import useLoginModal from "@/hooks/useLoginModal";
+import usePost from "@/hooks/usePost";
+import usePosts from "@/hooks/usePosts";
 
 interface FromProps {
   placeholder: string;
@@ -25,8 +26,10 @@ const MPform:React.FC<FromProps> = ({
   const loginModel = useLoginModal();
 
   const { data: currentUser } = useCurrentUser();
-  const { mutate: mutatePosts } = usePosts(postId);
-
+  
+  const { mutate: mutateAllPost } = usePosts( );
+  const { mutate: mutatePostbyPostId } = usePost( postId );
+  
   const [body, setBody] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,15 +44,19 @@ const MPform:React.FC<FromProps> = ({
       
       toast.success('Tweet created');
 
+      
       setBody('');
-      mutatePosts();
+
+      //refresh cached data
+      mutateAllPost();
+      mutatePostbyPostId();
     } catch(error) {
       toast.error('Something went wrong');
 
     } finally {
       setIsLoading(false);
     }
-  },[body , isComment, postId, mutatePosts]); 
+  },[body , isComment, postId,mutateAllPost,mutatePostbyPostId]); 
 
   return(
     <div className="border-b-[1px] border-neutral-800 px-5 py-2"> 

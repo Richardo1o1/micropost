@@ -20,15 +20,7 @@ generator client {
 //   url      = env("DATABASE_URL")
 // }
 
-// postgresql
-datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-}
-
-
-// prefix 10 Mysql version
+// // prefix 10 Mysql version
 // model User{
 //   id String @id 
 //   name String?
@@ -50,6 +42,12 @@ datasource db {
 //   notifications Notification[]
 // }
 
+// postgresql
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
 // prefix 10 postgresql version
 model User{
   id String @id 

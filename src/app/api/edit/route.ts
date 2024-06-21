@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import prisma from '@/libs/prismadb';
+import getCurrentUser from "@/libs/getCurrentuser";
 
 export async function PATCH(request : Request) {
   try{
@@ -8,8 +9,10 @@ export async function PATCH(request : Request) {
 
     const { name, username, bio, profileImage, coverImage,userId } = requestBody;
 
-    if(!name || !username ){
-      throw new Error('Missing fields!');
+    const currentuserId = await getCurrentUser();
+
+    if(!name || !username || !currentuserId){
+      throw new Error('Edit Missing fields!');
     }
 
     const updatedUser = await prisma.user.update({

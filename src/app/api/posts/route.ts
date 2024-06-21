@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { useSearchParams } from "next/navigation";
 
 import prisma from '@/libs/prismadb';
 import getUniqueID from "@/libs/uniqueID";
@@ -52,8 +51,11 @@ export async function POST(request : Request) {
     const currentuserId = await getCurrentUser();   
     const poseId = getUniqueID('20');
 
-    console.log("Post log:", requestBody, currentuserId, poseId);
-    
+    //console.log("Post log:", requestBody, currentuserId, poseId);
+    if (!requestBody || !currentuserId ) {
+      throw new Error('Missing fields requestBody/currentuserId!');
+    }
+
     const post = await prisma.post.create({
       data: {
         id : poseId,

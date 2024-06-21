@@ -1,4 +1,5 @@
 'use client'
+import { BsDot } from "react-icons/bs";
 
 import { useRouter } from 'next/navigation'
 import { useCallback } from "react";
@@ -11,13 +12,15 @@ interface SidebarItemProps {
     href: string;
     icon: IconType;
     onclick?:() => void;
+    alert?: boolean;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> =({
     label,
     href,
     icon: Icon,
-    onclick
+    onclick,
+    alert
 }) =>{
     const { data: currentUser } = useCurrentUser();
     const loginModal = useLoginModal();
@@ -54,6 +57,9 @@ const SidebarItem: React.FC<SidebarItemProps> =({
           "
         >
           <Icon size={28} color="white" />
+          {alert ? 
+            <BsDot className="text-sky-500 absolute -top-4 left-0" size={70} /> : null
+          }
         </div>
 
         <div 
@@ -74,6 +80,9 @@ const SidebarItem: React.FC<SidebarItemProps> =({
           <p className="hidden lg:block text-white text-xl">
              {label}
           </p>
+          {alert ? 
+            <BsDot className="text-sky-500 absolute -top-4 left-0" size={70} /> : null
+          }
         </div>
       </div>
     );

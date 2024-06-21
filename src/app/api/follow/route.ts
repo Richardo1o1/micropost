@@ -59,6 +59,25 @@ export async function DELETE(request : Request) {
       }
     });
 
+    // Add notification message
+    const notificationId = getUniqueID('30');
+    await prisma.notification.create({
+      data: {
+        id: notificationId,
+        body: 'Someone followed you!',
+        userId
+      }
+    });
+
+    await prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        hasNotification: true
+      }
+    });
+
     return NextResponse.json( { status: 200 });
   } catch (error){
     console.log(error);
